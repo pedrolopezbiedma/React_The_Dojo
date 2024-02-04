@@ -1,8 +1,11 @@
 // React
-import { BrowserRouter, Switch, Route } from "react-router-dom";
+import { BrowserRouter, Switch, Route, Redirect } from "react-router-dom";
 
 // Styles
 import "./App.css";
+
+// Context
+import { useAuthenticationContext } from "./hooks/useAuthenticationContext";
 
 // Components
 import Sidebar from "./components/Sidebar.";
@@ -14,27 +17,34 @@ import CreateProject from "./pages/CreateProject/CreateProject";
 import Project from "./pages/Project/Project";
 
 function App() {
+  const { user } = useAuthenticationContext();
+
   return (
     <div className="App">
       <BrowserRouter>
-        <Sidebar />
+        {user && <Sidebar />}
         <div className="container">
           <Navbar />
           <Switch>
             <Route exact path="/">
-              <Dashboard />
+              {user && <Dashboard />}
+              {!user && <Redirect to="/login" />}
             </Route>
             <Route path="/login">
-              <Login />
+              {user && <Redirect to="/" />}
+              {!user && <Login />}
             </Route>
             <Route path="/signup">
-              <Signup />
+              {user && <Redirect to="/" />}
+              {!user && <Signup />}
             </Route>
             <Route path="/create">
-              <CreateProject />
+              {user && <CreateProject />}
+              {!user && <Redirect to="/login" />}
             </Route>
             <Route path="/project/:id">
-              <Project />
+              {user && <Project />}
+              {!user && <Redirect to="/login" />}
             </Route>
           </Switch>
         </div>
