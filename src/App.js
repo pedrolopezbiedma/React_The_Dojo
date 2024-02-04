@@ -5,6 +5,7 @@ import { BrowserRouter, Switch, Route } from "react-router-dom";
 import "./App.css";
 
 // Components
+import Sidebar from "./components/Sidebar.";
 import Navbar from "./components/Navbar";
 import Dashboard from "./pages/Dashboard/Dashboard";
 import Login from "./pages/Login/Login";
@@ -16,6 +17,7 @@ function App() {
   return (
     <div className="App">
       <BrowserRouter>
+        <Sidebar />
         <div className="container">
           <Navbar />
           <Switch>
