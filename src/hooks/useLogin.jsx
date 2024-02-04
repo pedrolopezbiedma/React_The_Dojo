@@ -2,7 +2,7 @@
 import { useState } from "react";
 
 // Firebase
-import { projectAuthentication } from "../firebase/config";
+import { projectAuthentication, projectFirestore } from "../firebase/config";
 
 // Hooks
 import { useAuthenticationContext } from "../hooks/useAuthenticationContext";
@@ -22,8 +22,14 @@ const useLogin = () => {
         email,
         password
       );
-      dispatch({ type: "LOGIN_USER", payload: response.user });
 
+      // Update user in the firestore collection
+      await projectFirestore
+        .collection("users")
+        .doc(response.user.uid)
+        .update({ online: true });
+
+      dispatch({ type: "LOGIN_USER", payload: response.user });
       setIsPending(false);
     } catch (error) {
       setIsPending(false);
