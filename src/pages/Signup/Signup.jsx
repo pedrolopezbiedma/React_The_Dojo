@@ -4,40 +4,38 @@ import { useState } from "react";
 // Styles
 import "./Signup.css";
 
+// Hooks
+import { useSignup } from "../../hooks/useSignup";
+
 const Signup = () => {
+  const { signupUser, isPending, error } = useSignup();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [displayName, setDisplayName] = useState("");
   const [profilePicture, setProfilePicture] = useState([]);
-  const [error, setError] = useState(null);
+  const [profilePictureError, setProfilePictureError] = useState(null);
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    console.log(
-      "The form values are >>",
-      email,
-      password,
-      displayName,
-      profilePicture
-    );
+    signupUser(email, password, displayName, profilePicture);
   };
 
   const handlePicture = (event) => {
-    setError(null);
+    setProfilePictureError(null);
     const picture = event.target.files[0];
 
     if (picture === undefined) {
-      setError("Please, select an image as profile picture");
+      setProfilePictureError("Please, select an image as profile picture");
       return;
     }
 
     if (!picture.type.includes("image")) {
-      setError("Please, use an image for the profile picture");
+      setProfilePictureError("Please, use an image for the profile picture");
       return;
     }
 
     if (picture.size > 100000) {
-      setError(
+      setProfilePictureError(
         "Please, use a smaller picture for the profile ( Max. 100.000 Kb )"
       );
       return;
@@ -84,10 +82,18 @@ const Signup = () => {
           type="file"
           onChange={(event) => handlePicture(event)}
         />
-        {error && <div className="error">{error}</div>}
+        {profilePictureError && (
+          <div className="error">{profilePictureError}</div>
+        )}
       </label>
 
-      <button className="btn">Sign Up</button>
+      {!isPending && <button className="btn">Sign Up</button>}
+      {isPending && (
+        <button disabled className="btn">
+          Loading...
+        </button>
+      )}
+      {error && <div className="error"> {error}</div>}
     </form>
   );
 };
