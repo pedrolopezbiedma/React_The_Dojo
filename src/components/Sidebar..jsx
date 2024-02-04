@@ -14,7 +14,7 @@ const Sidebar = () => {
           {/* Avatar */}
           <p>Hey user!</p>
         </div>
-        <navbar className="links">
+        <nav className="links">
           <ul>
             <li>
               <NavLink exact to="/">
@@ -29,7 +29,7 @@ const Sidebar = () => {
               </NavLink>
             </li>
           </ul>
-        </navbar>
+        </nav>
       </div>
     </div>
   );
