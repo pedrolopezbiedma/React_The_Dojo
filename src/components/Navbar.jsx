@@ -5,7 +5,16 @@ import { Link } from "react-router-dom";
 import "./Navbar.css";
 import Logo from "../assets/temple.svg";
 
+// Hooks
+import { useLogout } from "../hooks/useLogout";
+
 const Navbar = () => {
+  const { logoutUser } = useLogout();
+
+  const handleClick = () => {
+    logoutUser();
+  };
+
   return (
     <div className="navbar">
       <ul>
@@ -21,7 +30,9 @@ const Navbar = () => {
           <Link to="/signup">Signup</Link>
         </li>
         <li>
-          <button className="btn">Log out</button>
+          <button className="btn" onClick={handleClick}>
+            Log out
+          </button>
         </li>
       </ul>
     </div>

@@ -30,6 +30,8 @@ const reducer = (state, action) => {
 const AuthenticationContextProvider = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
 
+  console.log("Authentication context is >>", state.user);
+
   useEffect(() => {
     const unsub = projectAuthentication.onAuthStateChanged((user) => {
       dispatch({ type: "AUTH_READY", payload: user });
