@@ -2,11 +2,14 @@
 import { useState } from "react";
 
 // Firebase
-import { projectAuthentication, projectStorage } from "../firebase/config";
+import {
+  projectAuthentication,
+  projectFirestore,
+  projectStorage,
+} from "../firebase/config";
 
 // Hooks
 import { useAuthenticationContext } from "./useAuthenticationContext";
-import { upload } from "@testing-library/user-event/dist/upload";
 
 const useSignup = () => {
   const [isPending, setIsPending] = useState(false);
@@ -18,14 +21,6 @@ const useSignup = () => {
       setError(null);
       setIsPending(true);
 
-      console.log(
-        "The form values are >>",
-        email,
-        password,
-        displayName,
-        profilePicture
-      );
-
       // Create user
       let response = await projectAuthentication.createUserWithEmailAndPassword(
         email,
@@ -36,6 +31,12 @@ const useSignup = () => {
       const uploadPath = `/thumbails/${response.user.uid}/${profilePicture.name}`;
       const img = await projectStorage.ref(uploadPath).put(profilePicture);
       const photoURL = await img.ref.getDownloadURL();
+
+      // Save the user info in the firestore
+      await projectFirestore
+        .collection("users")
+        .doc(response.user.uid)
+        .set({ photoURL, displayName, online: true });
 
       // Update profile with the display name
       await response.user.updateProfile({ displayName, photoURL });
