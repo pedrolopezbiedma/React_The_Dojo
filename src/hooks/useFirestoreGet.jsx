@@ -7,32 +7,43 @@ import { projectFirestore } from "../firebase/config";
 // Hooks
 import { useAuthenticationContext } from "./useAuthenticationContext";
 
-const useFirestoreGet = (collectionName) => {
+const useFirestoreGet = (collectionName, filterBy, sortedBy) => {
   const { user } = useAuthenticationContext();
   const [documents, setDocuments] = useState([]);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
+    setError(null);
     let collectionRef = projectFirestore.collection(collectionName);
 
     // Filtering documents by user id
-    collectionRef = collectionRef.where("user", "==", user.uid);
+    if (filterBy) {
+      collectionRef = collectionRef.where("user", "==", user.uid);
+    }
 
-    // Sorting documents by createdAt
-    collectionRef = collectionRef.orderBy("createdAt", "desc");
+    // Sorting documents by property
+    if (sortedBy) {
+      collectionRef = collectionRef.orderBy(sortedBy, "desc");
+    }
 
-    const unsub = collectionRef.onSnapshot((snapshot) => {
-      let updatedDocuments = [];
-      snapshot.docs.forEach((doc) => {
-        let document = { ...doc.data(), id: doc.id };
-        updatedDocuments.push(document);
-      });
-      setDocuments(updatedDocuments);
-    });
+    const unsub = collectionRef.onSnapshot(
+      (snapshot) => {
+        let updatedDocuments = [];
+        snapshot.docs.forEach((doc) => {
+          let document = { ...doc.data(), id: doc.id };
+          updatedDocuments.push(document);
+        });
+        setDocuments(updatedDocuments);
+      },
+      (error) => {
+        setError(error.message);
+      }
+    );
 
     return () => unsub();
-  }, [collectionName, user]);
+  }, [collectionName, user, filterBy, sortedBy]);
 
-  return { documents };
+  return { documents, error };
 };
 
 export { useFirestoreGet };

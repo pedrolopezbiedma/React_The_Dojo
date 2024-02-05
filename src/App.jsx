@@ -9,6 +9,7 @@ import { useAuthenticationContext } from "./hooks/useAuthenticationContext";
 
 // Components
 import Sidebar from "./components/Sidebar";
+import OnlineUsers from "./components/OnlineUsers";
 import Navbar from "./components/Navbar";
 import Dashboard from "./pages/Dashboard/Dashboard";
 import Login from "./pages/Login/Login";
@@ -48,6 +49,7 @@ function App() {
             </Route>
           </Switch>
         </div>
+        {user && <OnlineUsers />}
       </BrowserRouter>
     </div>
   );
