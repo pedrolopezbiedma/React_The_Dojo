@@ -1,6 +1,9 @@
 // Hooks
 import { useFirestoreGet } from "../../hooks/useFirestoreGet";
 
+// Components
+import ProjectList from "../../components/ProjectList";
+
 const Dashboard = () => {
   const { documents: projects, error } = useFirestoreGet("projects");
 
@@ -8,7 +11,7 @@ const Dashboard = () => {
     <div className="dashboard">
       <h2 className="page.title">Dashboard</h2>
       {error && <div className="error">{error}</div>}
-      {projects && projects.map((project) => <p>{project.name}</p>)}
+      {projects && <ProjectList projects={projects} />}
     </div>
   );
 };

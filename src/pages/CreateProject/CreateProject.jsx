@@ -69,7 +69,7 @@ const CreateProject = () => {
     const project = {
       name,
       details,
-      createdAt: timestamp.fromDate(new Date()),
+      dueDate: timestamp.fromDate(new Date()),
       comments: [],
       createdBy,
       users,
