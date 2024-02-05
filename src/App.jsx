@@ -8,7 +8,7 @@ import "./App.css";
 import { useAuthenticationContext } from "./hooks/useAuthenticationContext";
 
 // Components
-import Sidebar from "./components/Sidebar.";
+import Sidebar from "./components/Sidebar";
 import Navbar from "./components/Navbar";
 import Dashboard from "./pages/Dashboard/Dashboard";
 import Login from "./pages/Login/Login";

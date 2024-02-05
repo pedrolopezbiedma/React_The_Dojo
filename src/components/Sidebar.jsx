@@ -6,13 +6,20 @@ import "./Sidebar.css";
 import DashboardIcon from "../assets/dashboard_icon.svg";
 import CreateIcon from "../assets/add_icon.svg";
 
+// Hooks
+import { useAuthenticationContext } from "../hooks/useAuthenticationContext";
+
+// Components
+import Avatar from "./Avatar";
+
 const Sidebar = () => {
+  const { user } = useAuthenticationContext();
   return (
     <div className="sidebar">
       <div className="sidebar-content">
         <div className="user">
-          {/* Avatar */}
-          <p>Hey user!</p>
+          <Avatar user={user} />
+          <p>Hey {user.displayName}!</p>
         </div>
         <nav className="links">
           <ul>
