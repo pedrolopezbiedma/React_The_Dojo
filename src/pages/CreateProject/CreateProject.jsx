@@ -1,12 +1,18 @@
 // React
 import { useState } from "react";
+import { useHistory } from "react-router-dom";
 import Select from "react-select";
 
 // Styles
 import "./CreateProject.css";
 
+// Firebase
+import { timestamp } from "../../firebase/config";
+
 // Hooks
 import { useFirestoreGet } from "../../hooks/useFirestoreGet";
+import { useAuthenticationContext } from "../../hooks/useAuthenticationContext";
+import { useFirestoreUpdate } from "../../hooks/useFirestoreUpdate";
 
 // Categories
 const categories = [
@@ -17,7 +23,10 @@ const categories = [
 ];
 
 const CreateProject = () => {
+  const { user } = useAuthenticationContext();
   const { documents: users } = useFirestoreGet("users");
+  const { error, isPending, addDocument } = useFirestoreUpdate("projects");
+  const history = useHistory();
   const [name, setName] = useState("");
   const [details, setDetails] = useState("");
   const [dueDate, setDueDate] = useState("");
@@ -29,7 +38,7 @@ const CreateProject = () => {
     return { value: user, label: user.displayName };
   });
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
 
     setFormError(null);
@@ -43,14 +52,31 @@ const CreateProject = () => {
       return;
     }
 
-    console.log(
-      "Values in the form are >>",
+    const createdBy = {
+      userId: user.uid,
+      displayName: user.displayName,
+      photoURL: user.photoURL,
+    };
+
+    const users = assignedUsers.map((assignedUser) => {
+      return {
+        userId: assignedUser.value.id,
+        displayName: assignedUser.value.displayName,
+        photoURL: assignedUser.value.photoURL,
+      };
+    });
+
+    const project = {
       name,
       details,
-      dueDate,
-      category,
-      assignedUsers
-    );
+      createdAt: timestamp.fromDate(new Date()),
+      comments: [],
+      createdBy,
+      users,
+    };
+
+    await addDocument(project);
+    history.push("/");
   };
 
   return (
@@ -96,7 +122,13 @@ const CreateProject = () => {
             onChange={(event) => setAssignedUsers([...event])}
           />
         </label>
-        <button className="btn">Create Project</button>
+        {!isPending && <button className="btn">Create Project</button>}
+        {isPending && (
+          <button disabled className="btn">
+            Creating...
+          </button>
+        )}
+        {error && <div className="error">{error}</div>}
         {formError && <div className="error">{formError}</div>}
       </form>
     </div>
