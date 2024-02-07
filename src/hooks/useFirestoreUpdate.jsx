@@ -32,6 +32,14 @@ const reducer = (state, action) => {
         success: true,
       };
 
+    case "UPDATED":
+      return {
+        document: action.payload,
+        isPending: false,
+        error: null,
+        success: true,
+      };
+
     case "DELETED":
       return {
         document: null,
@@ -61,6 +69,17 @@ const useFirestoreUpdate = (collectionName) => {
     }
   };
 
+  const updateDocument = async (docId, update) => {
+    dispatch({ type: "LOADING" });
+
+    try {
+      const response = await collectionRef.doc(docId).update({ ...update });
+      dispatch({ type: "UPDATED", payload: response });
+    } catch (error) {
+      dispatch({ type: "ERROR", payload: error.message });
+    }
+  };
+
   const deleteDocument = async (docId) => {
     dispatch({ type: "LOADING" });
 
@@ -72,7 +91,7 @@ const useFirestoreUpdate = (collectionName) => {
     }
   };
 
-  return { ...state, addDocument, deleteDocument };
+  return { ...state, addDocument, updateDocument, deleteDocument };
 };
 
 export { useFirestoreUpdate };
