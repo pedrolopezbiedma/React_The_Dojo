@@ -12,6 +12,9 @@ import { timestamp } from "../firebase/config";
 import { useAuthenticationContext } from "../hooks/useAuthenticationContext";
 import { useFirestoreUpdate } from "../hooks/useFirestoreUpdate";
 
+// Components
+import Avatar from "./Avatar";
+
 const ProjectComments = ({ project }) => {
   const { id: docId } = useParams();
   const { updateDocument } = useFirestoreUpdate("projects");
@@ -37,6 +40,20 @@ const ProjectComments = ({ project }) => {
   return (
     <div className="project-comments">
       <h4>Project Comments</h4>
+      <ul>
+        {project.comments.length > 0 &&
+          project.comments.map((comment) => (
+            <li key={comment.id}>
+              <div className="comment-author">
+                <Avatar user={comment.user} />
+                <p>{comment.user.displayName}</p>
+              </div>
+              <div className="comment-date">{/* Date here */}</div>
+              <div className="comment-content">{comment.content}</div>
+            </li>
+          ))}
+      </ul>
+
       <form className="add-comment" onSubmit={handleSubmit}>
         <label>
           <span>Add new comments</span>
