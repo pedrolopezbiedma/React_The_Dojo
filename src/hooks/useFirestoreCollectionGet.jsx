@@ -7,7 +7,7 @@ import { projectFirestore } from "../firebase/config";
 // Hooks
 import { useAuthenticationContext } from "./useAuthenticationContext";
 
-const useFirestoreGet = (collectionName, filterBy, sortedBy) => {
+const useFirestoreCollectionGet = (collectionName, filterBy, sortedBy) => {
   const { user } = useAuthenticationContext();
   const [documents, setDocuments] = useState([]);
   const [error, setError] = useState(null);
@@ -46,4 +46,4 @@ const useFirestoreGet = (collectionName, filterBy, sortedBy) => {
   return { documents, error };
 };
 
-export { useFirestoreGet };
+export { useFirestoreCollectionGet };

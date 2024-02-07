@@ -2,13 +2,13 @@
 import "./OnlineUsers.css";
 
 // Hooks
-import { useFirestoreGet } from "../hooks/useFirestoreGet";
+import { useFirestoreCollectionGet } from "../hooks/useFirestoreCollectionGet";
 
 // Components
 import Avatar from "./Avatar";
 
 const OnlineUsers = () => {
-  const { documents: users, error } = useFirestoreGet("users");
+  const { documents: users, error } = useFirestoreCollectionGet("users");
 
   return (
     <div className="user-list">

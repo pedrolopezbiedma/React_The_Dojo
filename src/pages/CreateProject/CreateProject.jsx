@@ -10,7 +10,7 @@ import "./CreateProject.css";
 import { timestamp } from "../../firebase/config";
 
 // Hooks
-import { useFirestoreGet } from "../../hooks/useFirestoreGet";
+import { useFirestoreCollectionGet } from "../../hooks/useFirestoreCollectionGet";
 import { useAuthenticationContext } from "../../hooks/useAuthenticationContext";
 import { useFirestoreUpdate } from "../../hooks/useFirestoreUpdate";
 
@@ -24,7 +24,7 @@ const categories = [
 
 const CreateProject = () => {
   const { user } = useAuthenticationContext();
-  const { documents: users } = useFirestoreGet("users");
+  const { documents: users } = useFirestoreCollectionGet("users");
   const { error, isPending, addDocument } = useFirestoreUpdate("projects");
   const history = useHistory();
   const [name, setName] = useState("");

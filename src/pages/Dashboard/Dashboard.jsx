@@ -1,11 +1,11 @@
 // Hooks
-import { useFirestoreGet } from "../../hooks/useFirestoreGet";
+import { useFirestoreCollectionGet } from "../../hooks/useFirestoreCollectionGet";
 
 // Components
 import ProjectList from "../../components/ProjectList";
 
 const Dashboard = () => {
-  const { documents: projects, error } = useFirestoreGet("projects");
+  const { documents: projects, error } = useFirestoreCollectionGet("projects");
 
   return (
     <div className="dashboard">
