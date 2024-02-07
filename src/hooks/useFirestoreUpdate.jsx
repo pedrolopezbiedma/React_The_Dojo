@@ -83,6 +83,7 @@ const useFirestoreUpdate = (collectionName) => {
   const deleteDocument = async (docId) => {
     dispatch({ type: "LOADING" });
 
+    console.log("id is >>", docId);
     try {
       await collectionRef.doc(docId).delete();
       dispatch({ type: "DELETED" });

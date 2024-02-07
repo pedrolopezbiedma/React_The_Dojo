@@ -17,15 +17,18 @@ const ProjectDetails = () => {
     "projects",
     docId
   );
+
   return (
     <>
       {error && <div className="error">{error}</div>}
       {!error && project === "" && <div>No data for that id.</div>}
       {project && (
-        <div className="project-details">
-          <ProjectInfo project={project} />
-          <ProjectComments project={project} />
-        </div>
+        <>
+          <div className="project-details">
+            <ProjectInfo project={project} />
+            <ProjectComments project={project} />
+          </div>
+        </>
       )}
     </>
   );

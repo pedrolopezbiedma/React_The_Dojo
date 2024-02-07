@@ -1,10 +1,27 @@
+// React
+import { useParams, useHistory } from "react-router-dom";
+
 // Styles
 import "./ProjectInfo.css";
 
 // Components
 import Avatar from "./Avatar";
 
+// Hooks
+import { useAuthenticationContext } from "../hooks/useAuthenticationContext";
+import { useFirestoreUpdate } from "../hooks/useFirestoreUpdate";
+
 const ProjectInfo = ({ project }) => {
+  const { id } = useParams();
+  const history = useHistory();
+  const { user } = useAuthenticationContext();
+  const { deleteDocument } = useFirestoreUpdate("projects");
+
+  const handleClick = () => {
+    deleteDocument(id);
+    history.push("/");
+  };
+
   return (
     <div>
       <div className="project-info">
@@ -22,6 +39,15 @@ const ProjectInfo = ({ project }) => {
             ))}
         </div>
       </div>
+      {user.uid === project.createdBy.userId && (
+        <>
+          {
+            <button className="btn" onClick={handleClick}>
+              Mark as completed
+            </button>
+          }
+        </>
+      )}
     </div>
   );
 };
