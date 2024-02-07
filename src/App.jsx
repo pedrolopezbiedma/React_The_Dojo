@@ -15,7 +15,7 @@ import Dashboard from "./pages/Dashboard/Dashboard";
 import Login from "./pages/Login/Login";
 import Signup from "./pages/Signup/Signup";
 import CreateProject from "./pages/CreateProject/CreateProject";
-import Project from "./pages/Project/Project";
+import ProjectDetails from "./pages/ProjectDetails/ProjectDetails";
 
 function App() {
   const { user } = useAuthenticationContext();
@@ -44,7 +44,7 @@ function App() {
               {!user && <Redirect to="/login" />}
             </Route>
             <Route path="/project/:id">
-              {user && <Project />}
+              {user && <ProjectDetails />}
               {!user && <Redirect to="/login" />}
             </Route>
           </Switch>

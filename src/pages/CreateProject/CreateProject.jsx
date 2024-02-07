@@ -111,7 +111,6 @@ const CreateProject = () => {
           <Select
             value={category}
             options={categories}
-            value={category}
             onChange={(event) => setCategory(event)}
           />
         </label>

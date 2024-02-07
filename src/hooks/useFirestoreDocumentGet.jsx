@@ -15,7 +15,7 @@ const useFirestoreDocumentGet = (collection, docId) => {
       .doc(docId)
       .onSnapshot(
         (snapshot) => {
-          console.log("document is >>", snapshot);
+          setDocument(snapshot.data());
         },
         (error) => {
           setError(error.message);

@@ -8,7 +8,6 @@ import "./ProjectList.css";
 import Avatar from "./Avatar";
 
 const ProjectList = ({ projects }) => {
-  console.log("projects is >>", projects);
   return (
     <div className="project-list">
       {projects.length === 0 && <p>No projects to show</p>}
@@ -23,7 +22,7 @@ const ProjectList = ({ projects }) => {
               </p>
               <ul>
                 {project.users.map((user) => (
-                  <li>
+                  <li key={user.userId}>
                     <Avatar user={user} />
                   </li>
                 ))}
