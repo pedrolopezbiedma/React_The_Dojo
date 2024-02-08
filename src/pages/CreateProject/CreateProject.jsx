@@ -1,35 +1,35 @@
 // React
-import { useState } from "react";
-import { useHistory } from "react-router-dom";
-import Select from "react-select";
+import { useState } from 'react';
+import { useHistory } from 'react-router-dom';
+import Select from 'react-select';
 
 // Styles
-import "./CreateProject.css";
+import './CreateProject.css';
 
 // Firebase
-import { timestamp } from "../../firebase/config";
+import { timestamp } from '../../firebase/config';
 
 // Hooks
-import { useFirestoreCollectionGet } from "../../hooks/useFirestoreCollectionGet";
-import { useAuthenticationContext } from "../../hooks/useAuthenticationContext";
-import { useFirestoreUpdate } from "../../hooks/useFirestoreUpdate";
+import { useFirestoreCollectionGet } from '../../hooks/useFirestoreCollectionGet';
+import { useAuthenticationContext } from '../../hooks/useAuthenticationContext';
+import { useFirestoreUpdate } from '../../hooks/useFirestoreUpdate';
 
 // Categories
 const categories = [
-  { value: "development", label: "Development" },
-  { value: "design", label: "Design" },
-  { value: "sales", label: "Sales" },
-  { value: "marketing", label: "Marketing" },
+  { value: 'development', label: 'Development' },
+  { value: 'design', label: 'Design' },
+  { value: 'sales', label: 'Sales' },
+  { value: 'marketing', label: 'Marketing' },
 ];
 
 const CreateProject = () => {
   const { user } = useAuthenticationContext();
-  const { documents: users } = useFirestoreCollectionGet("users");
-  const { error, isPending, addDocument } = useFirestoreUpdate("projects");
+  const { documents: users } = useFirestoreCollectionGet('users');
+  const { error, isPending, addDocument } = useFirestoreUpdate('projects');
   const history = useHistory();
-  const [name, setName] = useState("");
-  const [details, setDetails] = useState("");
-  const [dueDate, setDueDate] = useState("");
+  const [name, setName] = useState('');
+  const [details, setDetails] = useState('');
+  const [dueDate, setDueDate] = useState('');
   const [category, setCategory] = useState(null);
   const [assignedUsers, setAssignedUsers] = useState([]);
   const [formError, setFormError] = useState(null);
@@ -43,12 +43,12 @@ const CreateProject = () => {
 
     setFormError(null);
     if (!category) {
-      setFormError("You need to assign a category");
+      setFormError('You need to assign a category');
       return;
     }
 
     if (assignedUsers.length === 0) {
-      setFormError("You need to assign at least one user");
+      setFormError('You need to assign at least one user');
       return;
     }
 
@@ -69,6 +69,7 @@ const CreateProject = () => {
     const project = {
       name,
       details,
+      category,
       dueDate: timestamp.fromDate(new Date()),
       comments: [],
       createdBy,
@@ -76,17 +77,17 @@ const CreateProject = () => {
     };
 
     await addDocument(project);
-    history.push("/");
+    history.push('/');
   };
 
   return (
-    <div className="create-form">
-      <h2 className="page-title">Create a New Project</h2>
+    <div className='create-form'>
+      <h2 className='page-title'>Create a New Project</h2>
       <form onSubmit={handleSubmit}>
         <label>
           <input
             required
-            type="text"
+            type='text'
             value={name}
             onChange={(event) => setName(event.target.value)}
           />
@@ -94,7 +95,7 @@ const CreateProject = () => {
         <label>
           <textarea
             required
-            type="text"
+            type='text'
             value={details}
             onChange={(event) => setDetails(event.target.value)}
           />
@@ -102,7 +103,7 @@ const CreateProject = () => {
         <label>
           <input
             required
-            type="date"
+            type='date'
             value={dueDate}
             onChange={(event) => setDueDate(event.target.value)}
           />
@@ -121,14 +122,17 @@ const CreateProject = () => {
             onChange={(event) => setAssignedUsers([...event])}
           />
         </label>
-        {!isPending && <button className="btn">Create Project</button>}
+        {!isPending && <button className='btn'>Create Project</button>}
         {isPending && (
-          <button disabled className="btn">
+          <button
+            disabled
+            className='btn'
+          >
             Creating...
           </button>
         )}
-        {error && <div className="error">{error}</div>}
-        {formError && <div className="error">{formError}</div>}
+        {error && <div className='error'>{error}</div>}
+        {formError && <div className='error'>{formError}</div>}
       </form>
     </div>
   );
