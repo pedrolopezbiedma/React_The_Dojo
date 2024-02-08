@@ -1,23 +1,24 @@
 // React
-import { useState } from "react";
-import { useParams } from "react-router-dom";
+import { useState } from 'react';
+import { useParams } from 'react-router-dom';
+import formatDistanceToNow from 'date-fns/formatDistanceToNow';
 
 // Styles
-import "./ProjectComments.css";
+import './ProjectComments.css';
 
 // Firebase
-import { timestamp } from "../firebase/config";
+import { timestamp } from '../firebase/config';
 
 // Hooks
-import { useAuthenticationContext } from "../hooks/useAuthenticationContext";
-import { useFirestoreUpdate } from "../hooks/useFirestoreUpdate";
+import { useAuthenticationContext } from '../hooks/useAuthenticationContext';
+import { useFirestoreUpdate } from '../hooks/useFirestoreUpdate';
 
 // Components
-import Avatar from "./Avatar";
+import Avatar from './Avatar';
 
 const ProjectComments = ({ project }) => {
   const { id: docId } = useParams();
-  const { updateDocument } = useFirestoreUpdate("projects");
+  const { updateDocument } = useFirestoreUpdate('projects');
   const [newComment, setNewComment] = useState(``);
   const { user } = useAuthenticationContext();
 
@@ -38,23 +39,30 @@ const ProjectComments = ({ project }) => {
   };
 
   return (
-    <div className="project-comments">
+    <div className='project-comments'>
       <h4>Project Comments</h4>
       <ul>
         {project.comments.length > 0 &&
           project.comments.map((comment) => (
             <li key={comment.id}>
-              <div className="comment-author">
+              <div className='comment-author'>
                 <Avatar user={comment.user} />
                 <p>{comment.user.displayName}</p>
               </div>
-              <div className="comment-date">{/* Date here */}</div>
-              <div className="comment-content">{comment.content}</div>
+              <div className='comment-date'>
+                {formatDistanceToNow(comment.createdAt.toDate(), {
+                  addSuffix: true,
+                })}
+              </div>
+              <div className='comment-content'>{comment.content}</div>
             </li>
           ))}
       </ul>
 
-      <form className="add-comment" onSubmit={handleSubmit}>
+      <form
+        className='add-comment'
+        onSubmit={handleSubmit}
+      >
         <label>
           <span>Add new comments</span>
           <textarea
@@ -63,7 +71,7 @@ const ProjectComments = ({ project }) => {
             onChange={(event) => setNewComment(event.target.value)}
           />
         </label>
-        <button className="btn">Add Comment</button>
+        <button className='btn'>Add Comment</button>
       </form>
     </div>
   );
